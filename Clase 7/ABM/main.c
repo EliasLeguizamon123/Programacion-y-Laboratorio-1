@@ -5,11 +5,14 @@
 void cargarEmpleado(int[], char[][20], float[], int[], int);
 void eliminarEmpleado(int[], char[][20], float[], int[], int);
 void modificarEmpleado(int[], char[][20], float[], int[], int);
+void ordenarDatos(int[], char[][20], float[], int[], int);
+void mostrarDatos(int[], char[][20], float[], int[], int);
 
 int main()
 {
     /*legajo nombre sueldo*/
 
+    system("CLS");
     int legajos[E], estado[E]= {0}, i, j;
     int auxInt, flagEncontro=0;
     char nombres[E][20], auxString[20];
@@ -36,78 +39,16 @@ int main()
             modificarEmpleado(legajos, nombres, sueldos, estado, E);
             break;
         case 4:
-            for(i=0; i<E-1; i++)
-            {
-                for(j=i+1; j<E; j++)
-                {
-                    if(strcmp(nombres[i], nombres[j])>0)
-                    {
-                        strcpy(auxString, nombres[i]);
-                        strcpy(nombres[i], nombres[j]);
-                        strcpy(nombres[j], auxString);
-
-                        auxInt=legajos[i];
-                        legajos[i] = legajos[j];
-                        legajos[j] = auxInt;
-
-                        auxFloat = sueldos[i];
-                        sueldos[i] = sueldos[j];
-                        sueldos[j] = auxFloat;
-
-                        auxInt=estado[i];
-                        estado[i] = estado[j];
-                        estado[j] = auxInt;
-
-
-                    }
-                    else
-                    {
-                        if(strcmp(nombres[i], nombres[j])==0)
-                        {
-                            if(legajos[i]>legajos[j])
-                            {
-                                auxInt=legajos[i];
-                                legajos[i] = legajos[j];
-                                legajos[j] = auxInt;
-
-                                auxFloat = sueldos[i];
-                                sueldos[i] = sueldos[j];
-                                sueldos[j] = auxFloat;
-
-                                auxInt=estado[i];
-                                estado[i] = estado[j];
-                                estado[j] = auxInt;
-                            }
-                        }
-                    }
-                }
-            }
-
-
-
-
-
+            ordenarDatos(legajos, nombres, sueldos, estado, E);
             break;
 
         case 5:
-
-            printf("Legajo\tnombre\tsueldo\n");
-            for(i=0; i<E; i++)
-            {
-                if(estado[i]!=0)
-                    printf("%d\t%s\t%.2f\n", legajos[i],nombres[i],sueldos[i]);
-            }
-
+            mostrarDatos(legajos, nombres, sueldos, estado, E);
             break;
         case 6:
             seguir='n';
             break;
-
         }
-
-
-
-
     }
     while(seguir=='s');
 
@@ -122,6 +63,7 @@ int main()
 
 void cargarEmpleado(int legajos[], char nombres[][20], float sueldos[], int estados[], int tam)
 {
+    system("CLS");
     int flagEncontro = 0, i;
     for(i=0; i<tam; i++)
     {
@@ -147,81 +89,155 @@ void cargarEmpleado(int legajos[], char nombres[][20], float sueldos[], int esta
     }
 }
 
- void eliminarEmpleado(int legajos[], char nombres[][20], float sueldos[], int estados[], int tam)
+void eliminarEmpleado(int legajos[], char nombres[][20], float sueldos[], int estados[], int tam)
+{
+    system("CLS");
+    int flagEncontro=0, i;
+    int auxInt;
+    char respuesta;
+    printf("Ingrese legajo: ");
+    scanf("%d", &auxInt);
+    for(i=0; i<tam; i++)
     {
-        int flagEncontro=0, i;
-        int auxInt;
-        char respuesta;
-        printf("Ingrese legajo: ");
-        scanf("%d", &auxInt);
-        for(i=0; i<tam; i++)
+        if(estados[i]==1)
         {
-            if(estados[i]==1)
+            if(auxInt == legajos[i])
             {
-                if(auxInt == legajos[i])
+                printf("%d\t%s\t%.2f\n", legajos[i],nombres[i],sueldos[i]);
+
+                printf("Esta seguro de eliminar el dato s/n: ");
+                respuesta = getche();
+                if(respuesta=='s')
                 {
-                    printf("%d\t%s\t%.2f\n", legajos[i],nombres[i],sueldos[i]);
-
-                    printf("Esta seguro de eliminar el dato s/n: ");
-                    respuesta = getche();
-                    if(respuesta=='s')
-                    {
-                        estados[i] = 0;
-                    }
-                    else
-                    {
-                        printf("Accion cancelada por el usuario!!!");
-                    }
-
-                    flagEncontro=1;
-                    break;
-
+                    estados[i] = 0;
+                }
+                else
+                {
+                    printf("Accion cancelada por el usuario!!!");
                 }
 
+                flagEncontro=1;
+                break;
+
             }
-        }
-        if(flagEncontro==0)
-        {
-            printf("Dato inexistente");
+
         }
     }
+    if(flagEncontro==0)
+    {
+        printf("Dato inexistente");
+    }
+}
 
 void modificarEmpleado(int legajos[], char nombres[][20], float sueldos[], int estados[], int tam)
 {
+    system("CLS");
     int flagEncontro=0, i, auxInt;
     float auxFloat;
     char respuesta;
-            printf("Ingrese legajo: ");
-            scanf("%d", &auxInt);
-            for(i=0; i<tam; i++)
+    printf("Ingrese legajo: ");
+    scanf("%d", &auxInt);
+    for(i=0; i<tam; i++)
+    {
+        if(estados[i]==1)
+        {
+            if(auxInt == legajos[i])
             {
-                if(estados[i]==1)
+                printf("%d\t%s\t%.2f\n", legajos[i],nombres[i],sueldos[i]);
+                printf("Ingrese sueldo a modificar");
+                scanf("%f", &auxFloat);
+                printf("Esta seguro de realizar la modificacion s/n: ");
+                respuesta = getche();
+                if(respuesta=='s')
                 {
-                    if(auxInt == legajos[i])
+                    sueldos[i] = auxFloat;
+                }
+                else
+                {
+                    printf("Accion cancelada por el usuario!!!");
+                }
+
+                flagEncontro=1;
+                break;
+
+            }
+
+        }
+    }
+    if(flagEncontro==0)
+    {
+        printf("Dato inexistente");
+    }
+}
+
+void ordenarDatos(int legajos[], char nombres[][20], float sueldos[], int estados[], int tam)
+{
+
+    int i, auxInt, j;
+    char auxString;
+    float auxFloat;
+    for(i=0; i<E-1; i++)
+    {
+        for(j=i+1; j<tam; j++)
+        {
+            if(strcmp(nombres[i], nombres[j])>0)
+            {
+                strcpy(auxString, nombres[i]);
+                strcpy(nombres[i], nombres[j]);
+                strcpy(nombres[j], auxString);
+
+                auxInt=legajos[i];
+                legajos[i] = legajos[j];
+                legajos[j] = auxInt;
+
+                auxFloat = sueldos[i];
+                sueldos[i] = sueldos[j];
+                sueldos[j] = auxFloat;
+
+                auxInt=estados[i];
+                estados[i] = estados[j];
+                estados[j] = auxInt;
+
+
+            }
+            else
+            {
+                if(strcmp(nombres[i], nombres[j])==0)
+                {
+                    if(legajos[i]>legajos[j])
                     {
-                        printf("%d\t%s\t%.2f\n", legajos[i],nombres[i],sueldos[i]);
-                        printf("Ingrese sueldo a modificar");
-                        scanf("%f", &auxFloat);
-                        printf("Esta seguro de realizar la modificacion s/n: ");
-                        respuesta = getche();
-                        if(respuesta=='s')
-                        {
-                            sueldos[i] = auxFloat;
-                        }
-                        else
-                        {
-                            printf("Accion cancelada por el usuario!!!");
-                        }
+                        auxInt=legajos[i];
+                        legajos[i] = legajos[j];
+                        legajos[j] = auxInt;
 
-                        flagEncontro=1;
-                        break;
+                        auxFloat = sueldos[i];
+                        sueldos[i] = sueldos[j];
+                        sueldos[j] = auxFloat;
 
+                        auxInt=estados[i];
+                        estados[i] = estados[j];
+                        estados[j] = auxInt;
                     }
-
                 }
             }
-            if(flagEncontro==0)
+        }
+    }
+
+
+
+
+
+
+}
+
+void mostrarDatos(int legajos[], char nombres[][20], float sueldos[], int estados[], int tam)
+{
+    int i;
+    printf("\n\nLegajo\tnombre\tsueldo\n");
+            for(i=0; i<tam; i++)
             {
-                printf("Dato inexistente");
+                if(estados[i]!=0)
+                    printf("%d\t%s\t%.2f\n", legajos[i],nombres[i],sueldos[i]);
             }
+
 }
