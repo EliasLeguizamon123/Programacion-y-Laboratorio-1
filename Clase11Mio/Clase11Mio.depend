@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1492562641 source:d:\mis documentos\eliasleguizamon\clase11mio\main.c
+	<stdio.h>
+	<stdlib.h>
+	"funciones.h"
+
+1492561579 d:\mis documentos\eliasleguizamon\clase11mio\funciones.h
+
+1492562735 source:d:\mis documentos\eliasleguizamon\clase11mio\funciones.c
+	<stdio.h>
+	<stdlib.h>
+	"funciones.h"
+
